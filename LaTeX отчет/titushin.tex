@@ -1,0 +1,214 @@
+\documentclass[12pt,pdf,hyperref={unicode}]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath, amsthm}
+\usepackage[export]{adjustbox}
+\usepackage{amsfonts}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{adjustbox}
+\usepackage{listings}
+\usepackage[T2A]{fontenc}
+\usepackage[koi8-r]{inputenc}%включаем свою кодировку: koi8-r или utf8 в UNIX, cp1251 в Windows
+\renewcommand{\lstlistingname}{Листинг}
+\usepackage{python}
+
+\documentclass{article}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\usepackage{graphicx,xcolor}
+\usepackage{algorithm2e}
+\usepackage{pdfpages}
+
+\usetheme{Darmstadt}%Darmstadt
+\setbeamertemplate{\insertframenumber}
+
+\newtheorem{statement}{Утверждение.}
+
+\setcounter{enumi}{1}
+\title{Практикум на ЭВМ Метод барьерных функций с методом Давидона-Флетчера-Пауэлла}
+\author{Титушин Александр Дмитриевич}
+\institute{группа 411}
+
+\begin{document}
+\newcommand\Rn{\R^n}
+
+\frame{\maketitle}
+
+\begin{frame}
+\frametitle{Метод Барьерных Функций: Основная Идея}
+\begin{itemize}
+    \item Преобразует задачу с ограничениями:
+    \[
+    \min f(x) \quad \text{при} \quad g_i(x) \leq 0, \quad i=1,...,m
+    \]
+    в задачу без ограничений, добавляя барьерную функцию:
+    \[
+    \phi(x, \mu) = f(x) + \mu \sum_{i=1}^m B_i(x)
+    \]
+    где $B_i(x)$ - барьерная функция, например $-\log(-g_i(x))$.
+    \item С каждой итерацией параметр $\mu$ уменьшается, что приводит к последовательному приближению к решению исходной задачи.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Метод Давидона-Флетчера-Пауэлла (DFP)}
+\begin{itemize}
+    \item Метод квази-Ньютона для минимизации функции.
+    \item Основная идея: Итерирующее обновление приближения инверсии Гессиана с использованием градиента функции.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Метод Давидона-Флетчера-Пауэлла (DFP): Шаги алгоритма}
+1) \textbf{Инициализация:} Задать начальную точку $x_0$ и начальную аппроксимацию обратной Гессианской матрицы $H_0 = I$.
+    
+2) \textbf{Вычисление градиента:} В каждой итерации вычислить градиент функции $\nabla f_k$ в текущей точке $x_k$.
+    \[
+    \nabla f_k = \left( \frac{\partial f}{\partial x_0}, \frac{\partial f}{\partial x_1}, \ldots, \frac{\partial f}{\partial x_n} \right) \bigg|_{x = x_k}
+    \]
+    
+3) \textbf{Определение направления поиска:} Найти направление поиска $p_k$ с использованием текущей аппроксимации обратной Гессианской матрицы $H_k$.
+    \[
+    p_k = -H_k \nabla f_k
+    \]
+\end{frame}
+
+\begin{frame}
+\frametitle{Метод Давидона-Флетчера-Пауэлла (DFP): Шаги алгоритма}
+4) \textbf{Линейный поиск:} Найти оптимальное значение шага $\alpha_k$, чтобы минимизировать функцию вдоль направления $p_k$.
+    \[
+    x_{k+1} = x_k + \alpha_k p_k
+    \]
+    
+5) \textbf{Вычисление новых градиентов:} Вычислить новый градиент $\nabla f_{k+1}$ в точке $x_{k+1}$.
+\newline 
+\end{frame}
+
+\begin{frame}
+\frametitle{Метод Давидона-Флетчера-Пауэлла (DFP): Шаги алгоритма}
+6) \textbf{Обновление аппроксимации обратной Гессианской матрицы:} Используя формулы обновления DFP:
+    \begin{align*}
+        s_k &= x_{k+1} - x_k \\
+        y_k &= \nabla f_{k+1} - \nabla f_k \\
+        \rho_k &= \frac{1}{y_k^T s_k} \\
+H_{k+1} &= \left( I - \rho_k s_k y_k^T \right) H_k \left( I - \rho_k y_k s_k^T \right) + \rho_k s_k s_k^T
+    \end{align*}
+    
+    \item \textbf{Проверка сходимости:} Если $\|\nabla f_{k+1}\| < \epsilon$, остановиться. Иначе, перейти к следующей итерации.
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Реализация основных функций}
+\begin{center}
+    \includegraphics[width=0.7\textwidth]{image1.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Реализация основных функций}
+\begin{center}
+    \includegraphics[width=0.9\textwidth]{image2.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Реализация барьерной функции}
+\begin{center}
+    \includegraphics[width=0.9\textwidth]{image3.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Реализация DFP с методом барьерных функций}
+\begin{center}
+    \includegraphics[width=0.6\textwidth]{image4.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Пример 1}
+\[
+f(x) = (x_0 - 3)^2 + (x_1 - 2)^2
+\]
+Ограничения: \\
+\[
+x_0 \geq 1, \quad x_1 \geq 1
+\]
+
+Начальная точка: $(2.0, 1.5)$
+Оптимальное решение: $(3.0, 2.0)$
+Значение целевой функции: $0.0$
+\end{frame}
+
+\begin{frame}
+\frametitle{Пример 1}
+\begin{center}
+    \includegraphics[width=0.6\textwidth]{image5.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Пример 1}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{image6.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Пример 2}
+\[
+f(x) = 2x_0^2 + x_0x_1 + x_1^2
+\]
+Ограничения: \\
+\[
+x_0 <= 2, \quad x_1 <= 2
+\]
+Начальная точка: $(0.5, 1.0)$
+Оптимальное решение: $(0.0, 0.0)$
+Значение целевой функции: $0.0$
+\end{frame}
+
+\begin{frame}
+\frametitle{Пример 2}
+\begin{center}
+    \includegraphics[width=0.6\textwidth]{image7.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Пример 2}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{image8.png}
+\end{center}
+\end{frame}
+
+\end{document}

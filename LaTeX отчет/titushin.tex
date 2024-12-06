@@ -263,4 +263,113 @@ $g(xt) = \sum_{i=1}^5(i*x_i^2) = 21918 > 72$
 для выданной целевой функции f(x) находится за пределами выданной барьерной функции g(x), поэтому программа выдает с точностью 0.001 локальное оптимальное решение на доступном для нее пространстве (сверяем со стандартной питоновской выдачей). Если увеличить g(x) до <= 21920 и более, то программа выдает с точностью 0.00000001 верное глобальное оптимальное решение (также сверяем со стандартными питоновскими методами оптимизации). 
 \end{frame}
 
+\begin{frame}
+\frametitle{зависимость числа итераций от (x0, 0, 0, 0, 0) }
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{x0.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{зависимость числа итераций от (0, x1, 0, 0, 0) }
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{x1.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{зависимость числа итераций от (0, 0, x2, 0, 0) }
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{x2.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{зависимость числа итераций от (0, 0, 0, x3, 0) }
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{x3.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{зависимость числа итераций от (0, 0, 0, 0, x4) }
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{x4.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{таблица решений в зависимости от выбора начальной точки вида (x,x,x,x)}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{xxx1.png}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{таблица решений в зависимости от выбора начальной точки вида (x,x,x,x)}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{xxx2.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{таблица решений в зависимости от выбора начальной точки вида (x,x,x,x)}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{xxx3.png}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Вывод}
+Где 0 итераций, значит метод не сходится. Исходя из полученных данных, можно сказать, что метод сходится с достаточной точностью и за приемлимое число итераций из точки-окрестности нуля диаметра (-2.5, 2.5).
+
+\end{frame}
+
+\begin{frame}
+\frametitle{таблицу решений в зависимости от изменения радиуса допустимой области}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{radius.png}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Выводы}
+Насколько видно из проведенных экспериментов глобальное оптимальное решение xt = [ 1.32483905  1.7042027   2.85235099  8.10948754 65.76378813]
+$g(xt) = \sum_{i=1}^5(i*x_i^2) = 21918 > 72$
+для выданной целевой функции f(x) находится за пределами выданной барьерной функции g(x), поэтому программа выдает с точностью 0.001 локальное оптимальное решение на доступном для нее пространстве (сверяем со стандартной питоновской выдачей). Если увеличить g(x) до <= 21900 и более, то программа выдает с точностью 0.00000001 верное глобальное оптимальное решение (также сверяем со стандартными питоновскими методами оптимизации). 
+\end{frame}
+
+\begin{frame}
+\frametitle{ зависимость точности найденного решения от выбора критерия остановки}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{tolerance.png}
+\end{center}
+
+Чем меньше критерий остановки, тем выше точность решения. (точность решения сверяется с решением из стандартных питоновских функций)
+\end{frame}
+
+\begin{frame}
+\frametitle{Исследовать зависимость числа итераций от длины шага метода при заданной точности 0,0001}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{mu.png}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Исследовать влияние вида барьерной/штрафной функции на скорость сходимости метода}
+\begin{center}
+    \includegraphics[width=0.6\textwidth]{barrier.png}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Исследовать влияние вида барьерной/штрафной функции на скорость сходимости метода вывод}
+Из результатов эксперимента видно, что квадратичная барьерная функция лучше себя показывает по количеству итераций, нежели логарифмическая. Причем в точности не уступает ни одна ни вторая.
+
+\end{frame}
 \end{document}
